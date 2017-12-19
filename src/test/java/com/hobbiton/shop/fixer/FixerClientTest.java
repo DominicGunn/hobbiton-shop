@@ -11,6 +11,9 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -18,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class FixerClientTest extends ResourceAwareTest {
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private static final String EXCHANGE_CURRENCY = "USD";
     private static final Double GBP_EXCHANGE_RATE = 0.74784;
@@ -39,6 +44,8 @@ public class FixerClientTest extends ResourceAwareTest {
     public void testFetchExchangeRates() throws Exception {
         final FixerExchangeRates exchangeRates = fixerClient.fetchExchangeRates(EXCHANGE_CURRENCY);
 
+        final Date exchangeDate = SIMPLE_DATE_FORMAT.parse("2017-12-18");
+        assertThat(exchangeRates.getExchangeDate()).isEqualTo(exchangeDate);
         assertThat(exchangeRates.getBaseExchangeRate()).isEqualTo(EXCHANGE_CURRENCY);
         assertThat(exchangeRates.getExchangeRates().get("GBP")).isEqualTo(GBP_EXCHANGE_RATE);
     }

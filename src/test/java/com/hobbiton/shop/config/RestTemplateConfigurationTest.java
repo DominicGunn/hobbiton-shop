@@ -1,4 +1,4 @@
-package com.hobbiton.common;
+package com.hobbiton.shop.config;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +18,6 @@ public class RestTemplateConfigurationTest {
 
     @Test
     public void testRestTemplateIsNotNull() throws Exception {
-        assertThat(restTemplateConfiguration).isNotNull();
+        assertThat(restTemplateConfiguration.restTemplate()).isNotNull();
     }
 }

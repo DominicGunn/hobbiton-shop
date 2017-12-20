@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.time.Instant;
@@ -53,8 +54,8 @@ public class ProductService {
                 final Product product = productServiceClient.fetchProduct(productId);
                 productCache.put(productId, product);
                 return product;
-            } catch (RestClientException ex) {
-                logger.error("Unable to fetch product [{}] from the product service", productId, ex);
+            } catch (HttpClientErrorException ex) {
+                logger.warn("Unable to fetch product [{}] from the product service", productId);
                 throw new ProductNotFoundException(String.format("Product %s not found!", productId));
             }
         }

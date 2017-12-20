@@ -2,7 +2,6 @@ package com.hobbiton.shop.products;
 
 import com.hobbiton.shop.config.ExternalServiceConfiguration;
 import com.hobbiton.shop.products.models.Product;
-import org.glassfish.jersey.internal.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -48,10 +49,10 @@ public class ProductServiceClient {
 
     private HttpHeaders createRequestHeaders() {
         final HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add(HttpHeaders.AUTHORIZATION, String.format("Basic %s",  Base64.encodeAsString(String.format("%s:%s",
+        requestHeaders.add(HttpHeaders.AUTHORIZATION, String.format("Basic %s",  Base64.getEncoder().encodeToString(String.format("%s:%s",
                 externalServiceConfiguration.getProductServiceUsername(),
-                externalServiceConfiguration.getProductServicePassword())
-        )));
+                externalServiceConfiguration.getProductServicePassword()
+        ).getBytes(StandardCharsets.UTF_8))));
         return requestHeaders;
     }
 }

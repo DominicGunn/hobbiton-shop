@@ -54,7 +54,7 @@ public class ProductService {
                 final Product product = productServiceClient.fetchProduct(productId);
                 productCache.put(productId, product);
                 return product;
-            } catch (HttpClientErrorException ex) {
+            } catch (RestClientException ex) {
                 logger.warn("Unable to fetch product [{}] from the product service", productId);
                 throw new ProductNotFoundException(String.format("Product %s not found!", productId));
             }

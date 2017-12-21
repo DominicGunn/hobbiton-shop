@@ -7,7 +7,9 @@ public class Product {
 
     private String id;
     private String name;
+
     private int usdPrice;
+    private double price;
 
     public Product() {
         // Default Constructor
@@ -29,5 +31,13 @@ public class Product {
 
     public int getUsdPrice() {
         return usdPrice;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

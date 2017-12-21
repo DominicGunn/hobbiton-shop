@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   shop_database:
-    image: postgres
+    image: postgres:9.6.4
     ports:
         - "5432:5432"
     environment:

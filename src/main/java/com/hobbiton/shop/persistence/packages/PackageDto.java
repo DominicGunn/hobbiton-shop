@@ -21,7 +21,7 @@ public class PackageDto {
     private String description;
 
     @ElementCollection
-    @CollectionTable(name="package_products")
+    @CollectionTable(name="packages_products")
     private List<String> productIds;
 
     public PackageDto() {

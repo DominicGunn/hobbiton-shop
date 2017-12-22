@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExternalServiceConfiguration {
 
-    @Value("${external.product.service.username:user}")
+    @Value("${external.products.service.username:user}")
     private String productServiceUsername;
 
-    @Value("${external.product.service.password:pass}")
+    @Value("${external.products.service.password:pass}")
     private String productServicePassword;
 
     public String getProductServiceUsername() {

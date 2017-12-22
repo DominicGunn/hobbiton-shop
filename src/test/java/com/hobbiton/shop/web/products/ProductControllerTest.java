@@ -1,4 +1,4 @@
-package com.hobbiton.shop.web.product;
+package com.hobbiton.shop.web.products;
 
 import com.hobbiton.shop.products.ProductService;
 import com.hobbiton.shop.products.exceptions.ProductNotFoundException;

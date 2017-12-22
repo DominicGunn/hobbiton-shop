@@ -31,7 +31,7 @@ public class ProductServiceClientTest extends ResourceAwareTest {
     private static final String PRODUCT_SERVICE_PASSWORD = "test-password";
 
     private static final String PRODUCT_ID = "testProductId";
-    private static final String PRODUCT_API_BASE_URL = "https://product-service.herokuapp.com/api/v1/products";
+    private static final String PRODUCT_API_BASE_URL = "https://products-service.herokuapp.com/api/v1/products";
 
     @Mock
     private RestTemplate restTemplate;

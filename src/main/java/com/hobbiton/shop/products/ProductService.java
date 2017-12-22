@@ -11,10 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -55,7 +52,7 @@ public class ProductService {
                 productCache.put(productId, product);
                 return product;
             } catch (RestClientException ex) {
-                logger.warn("Unable to fetch product [{}] from the product service", productId);
+                logger.warn("Unable to fetch products [{}] from the products service", productId);
                 throw new ProductNotFoundException(String.format("Product %s not found!", productId));
             }
         }
@@ -64,8 +61,9 @@ public class ProductService {
 
     private void cacheProducts() {
         try {
-            // Query product service for existing products and cache them.
-            final List<Product> existingProducts = productServiceClient.fetchProducts();
+            // Query products service for existing products and cache them.
+            // TODO: Move back to using the productServiceClient when productService is back online.
+            final List<Product> existingProducts = Collections.singletonList(new Product("VqKb4tyj9V6i", "Shield", 1149));//productServiceClient.fetchProducts();
 
             // Update last fetch date.
             lastFetchDate = new Date();
@@ -76,7 +74,7 @@ public class ProductService {
             // Put all the products into the cache.
             productCache.putAll(productMap);
         } catch (RestClientException ex) {
-            logger.error("Unable to fetch products from the product service", ex);
+            logger.error("Unable to fetch products from the products service", ex);
         }
     }
 

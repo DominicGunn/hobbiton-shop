@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class ProductServiceClient {
 
-    private static final String PRODUCT_API_BASE_URL = "https://product-service.herokuapp.com/api/v1/products";
+    private static final String PRODUCT_API_BASE_URL = "https://products-service.herokuapp.com/api/v1/products";
     private static final ParameterizedTypeReference<List<Product>> PRODUCT_TYPE_REFERENCE = new ParameterizedTypeReference<List<Product>>(){ };
 
     @Autowired

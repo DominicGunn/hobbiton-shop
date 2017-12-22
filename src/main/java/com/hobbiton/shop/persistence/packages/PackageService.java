@@ -1,6 +1,7 @@
 package com.hobbiton.shop.persistence.packages;
 
 import com.hobbiton.shop.fixer.FixerService;
+import com.hobbiton.shop.persistence.packages.exceptions.PackageNotFoundException;
 import com.hobbiton.shop.persistence.packages.models.ShopPackage;
 import com.hobbiton.shop.products.ProductService;
 import com.hobbiton.shop.products.models.Product;
@@ -32,14 +33,12 @@ public class PackageService {
     @Autowired
     private PackageRepository packageRepository;
 
-    public ShopPackage savePackage(String name, String description, List<String> productId) {
-        // TODO: Verify products exist, move currency conversion to productService, create PackageControllerAdvice.
-        final PackageDto packageDto = packageRepository.save(new PackageDto(name, description, productId));
-        return preparePackage(packageDto, "USD");
-    }
-
     public ShopPackage getPackage(Long packageId, String currency) {
-        return preparePackage(packageRepository.findOne(packageId), currency);
+        final PackageDto packageDto = packageRepository.findOne(packageId);
+        if (packageDto == null) {
+            throw new PackageNotFoundException(String.format("Package %d was not found", packageId));
+        }
+        return preparePackage(packageDto, currency);
     }
 
     public List<ShopPackage> getPackages(String currency) {
@@ -48,11 +47,41 @@ public class PackageService {
                 .collect(Collectors.toList());
     }
 
+    public ShopPackage savePackage(String name, String description, List<String> productIds, String currency) {
+        // TODO: Verify products exist, move currency conversion to productService, create PackageControllerAdvice.
+        final PackageDto packageDto = packageRepository.save(new PackageDto(name, description, productIds));
+        return preparePackage(packageDto, currency);
+    }
+
+    public ShopPackage updatePackage(Long packageId, String name, String description, List<String> productIds, String currency) {
+        final PackageDto packageDto = packageRepository.findOne(packageId);
+        if (packageDto == null) {
+            throw new PackageNotFoundException(String.format("Package %d was not found", packageId));
+        }
+
+        // TODO: Verify products exist, move currency conversion to productService, create PackageControllerAdvice.
+        packageDto.setName(name);
+        packageDto.setDescription(description);
+        packageDto.setProductIds(productIds);
+
+        packageRepository.save(packageDto);
+
+        return preparePackage(packageDto, currency);
+    }
+
+    public void deletePackage(Long packageId) {
+        final PackageDto packageDto = packageRepository.findOne(packageId);
+        if (packageDto == null) {
+            throw new PackageNotFoundException(String.format("Package %d was not found", packageId));
+        }
+        packageRepository.delete(packageDto);
+    }
+
     /**
      * This method prepares a ShopPackage in a currency requested by a client.
      * @param packageDto The package stored in the database.
      * @param currency The currency requested by the client (USD by default).
-     * @return ShopPackage containing product information and currency requested by client.
+     * @return ShopPackage containing products information and currency requested by client.
      */
     private ShopPackage preparePackage(PackageDto packageDto, String currency) {
         final List<Product> packageProductList = new ArrayList<>();

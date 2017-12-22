@@ -26,7 +26,7 @@ public class FixerService {
 
     private BigDecimal fetchExchangeRate(String currentCurrency, String exchangeCurrency) {
         final FixerExchangeRates fixerExchangeRates = fixerClient.fetchExchangeRates(currentCurrency);
-        final Double exchangeRate = fixerExchangeRates.getExchangeRates().get(exchangeCurrency);
+        final Double exchangeRate = fixerExchangeRates.getExchangeRates().get(exchangeCurrency.toUpperCase());
         if (exchangeRate == null) {
             throw new CurrencyExchangeException(String.format("Could not find exchange rate for %s", exchangeCurrency));
         }

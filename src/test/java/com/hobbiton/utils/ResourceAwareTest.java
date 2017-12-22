@@ -14,7 +14,7 @@ import java.util.List;
  */
 public abstract class ResourceAwareTest {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    protected static final ObjectMapper objectMapper = new ObjectMapper();
     private static final ClassLoader classLoader = ResourceAwareTest.class.getClassLoader();
 
     public <T> T readResource(String resourceLocation, Class<T> clazz) throws Exception {

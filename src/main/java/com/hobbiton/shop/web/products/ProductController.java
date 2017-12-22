@@ -4,10 +4,7 @@ import com.hobbiton.shop.products.ProductService;
 import com.hobbiton.shop.products.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,12 +14,15 @@ import java.util.List;
 @RestController
 public class ProductController {
 
+    private static final String DEFAULT_CURRENCY_CODE = "USD";
+
     @Autowired
     private ProductService productService;
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> getProducts() {
-        final List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
+        final List<Product> productList = productService.getProducts(currencyCode);
         if (productList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -30,7 +30,9 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/products/{productId}", method = RequestMethod.GET)
-    public ResponseEntity<Product> getProduct(@PathVariable("productId") String productId) {
-        return ResponseEntity.ok(productService.getProduct(productId));
+    public ResponseEntity<Product> getProduct(
+            @PathVariable("productId") String productId,
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
+        return ResponseEntity.ok(productService.getProduct(productId, currencyCode));
     }
 }

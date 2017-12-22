@@ -17,41 +17,41 @@ import java.util.List;
 @RestController
 public class PackageController {
 
-    private static final String DEFAULT_CURRENCY = "USD";
+    private static final String DEFAULT_CURRENCY_CODE = "USD";
 
     @Autowired
     private PackageService packageService;
 
     @RequestMapping(value = "/packages", method = RequestMethod.GET)
     public ResponseEntity<List<ShopPackage>> getPackages(
-            @RequestParam(value = "currency", required = false, defaultValue = DEFAULT_CURRENCY) String currency) {
-        return ResponseEntity.ok(packageService.getPackages(currency));
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
+        return ResponseEntity.ok(packageService.getPackages(currencyCode));
     }
 
     @RequestMapping(value = "/packages/{packageId}", method = RequestMethod.GET)
     public ResponseEntity<ShopPackage> getPackage(
             @PathVariable("packageId") Long packageId,
-            @RequestParam(value = "currency", required = false, defaultValue = DEFAULT_CURRENCY) String currency) {
-        return ResponseEntity.ok(packageService.getPackage(packageId, currency));
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
+        return ResponseEntity.ok(packageService.getPackage(packageId, currencyCode));
     }
 
     @RequestMapping(value = "/packages", method = RequestMethod.POST)
     public ResponseEntity<ShopPackage> savePackage(
             @RequestBody PackageRequest packageRequest,
-            @RequestParam(value = "currency", required = false, defaultValue = DEFAULT_CURRENCY) String currency) {
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
         final ShopPackage shopPackage = packageService.savePackage(
-                packageRequest.getName(), packageRequest.getDescription(), packageRequest.getProductIds(), currency
+                packageRequest.getName(), packageRequest.getDescription(), packageRequest.getProductIds(), currencyCode
         );
         final URI resourceLocation = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(shopPackage.getId()).toUri();
         return ResponseEntity.created(resourceLocation).body(shopPackage);
     }
 
     @RequestMapping(value = "/packages/{packageId}", method = RequestMethod.PUT)
-    public ResponseEntity<ShopPackage> savePackage(
+    public ResponseEntity<ShopPackage> updatePackage(
             @PathVariable("packageId") Long packageId, @RequestBody PackageRequest packageRequest,
-            @RequestParam(value = "currency", required = false, defaultValue = DEFAULT_CURRENCY) String currency) {
+            @RequestParam(value = "currencyCode", required = false, defaultValue = DEFAULT_CURRENCY_CODE) String currencyCode) {
         final ShopPackage shopPackage = packageService.updatePackage(
-                packageId, packageRequest.getName(), packageRequest.getDescription(), packageRequest.getProductIds(), currency
+                packageId, packageRequest.getName(), packageRequest.getDescription(), packageRequest.getProductIds(), currencyCode
         );
         return ResponseEntity.ok(shopPackage);
     }

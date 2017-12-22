@@ -1,5 +1,6 @@
 package com.hobbiton.shop.products;
 
+import com.hobbiton.shop.fixer.FixerService;
 import com.hobbiton.shop.products.exceptions.ProductNotFoundException;
 import com.hobbiton.shop.products.models.Product;
 import com.hobbiton.shop.utils.LRUCache;
@@ -27,20 +28,27 @@ public class ProductService {
     private static final Integer CACHE_REFRESH_TIME_IN_MINUTES = 5;
 
     @Autowired
+    private FixerService fixerService;
+
+    @Autowired
     private ProductServiceClient productServiceClient;
 
     private Date lastFetchDate = new Date(0);
     private LRUCache<String, Product> productCache = new LRUCache<>(100);
 
-    public List<Product> getProducts() {
+    public List<Product> getProducts(String currencyCode) {
         if (shouldRefreshCache()) {
             cacheProducts();
         }
-        return new ArrayList<>(productCache.values());
+        return new ArrayList<>(productCache.values().stream().peek(product ->
+                product.setPrice(convertPrice(currencyCode, product.getUsdPrice()))
+        ).collect(Collectors.toList()));
     }
 
-    public Product getProduct(String productId) {
-        return getOrFetchProduct(productId);
+    public Product getProduct(String productId, String currencyCode) {
+        final Product product = getOrFetchProduct(productId);
+        product.setPrice(convertPrice(currencyCode, product.getUsdPrice()));
+        return product;
     }
 
     private Product getOrFetchProduct(String productId) {
@@ -62,20 +70,30 @@ public class ProductService {
     private void cacheProducts() {
         try {
             // Query products service for existing products and cache them.
-            // TODO: Move back to using the productServiceClient when productService is back online.
-            final List<Product> existingProducts = Collections.singletonList(new Product("VqKb4tyj9V6i", "Shield", 1149));//productServiceClient.fetchProducts();
+//            final List<Product> existingProducts = productServiceClient.fetchProducts();
+            final List<Product> existingProducts = Collections.singletonList(new Product("VqKb4tyj9V6i", "Shield", 1149));
 
             // Update last fetch date.
             lastFetchDate = new Date();
 
             // Convert products to a map, using their Id as the key.
-            final Map<String, Product> productMap = existingProducts.stream().collect(Collectors.toMap(Product::getId, product -> product));
+            final Map<String, Product> productMap = existingProducts.stream().collect(
+                    Collectors.toMap(Product::getId, product -> product)
+            );
 
             // Put all the products into the cache.
             productCache.putAll(productMap);
         } catch (RestClientException ex) {
             logger.error("Unable to fetch products from the products service", ex);
         }
+    }
+
+
+    private double convertPrice(String currencyCode, double currentPrice) {
+        if ("USD".equals(currencyCode)) {
+            return currentPrice;
+        }
+        return fixerService.exchange(currencyCode, currentPrice);
     }
 
     private boolean shouldRefreshCache() {

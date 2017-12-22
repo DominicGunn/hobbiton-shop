@@ -6,9 +6,6 @@ import com.hobbiton.shop.persistence.packages.models.ShopPackage;
 import com.hobbiton.shop.products.ProductService;
 import com.hobbiton.shop.products.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,9 +20,6 @@ import java.util.stream.StreamSupport;
 @Service
 @Transactional
 public class PackageService {
-
-    @Autowired
-    private FixerService fixerService;
 
     @Autowired
     private ProductService productService;
@@ -56,7 +50,7 @@ public class PackageService {
     public ShopPackage updatePackage(Long packageId, String name, String description, List<String> productIds, String currency) {
         final PackageDto packageDto = packageRepository.findOne(packageId);
         if (packageDto == null) {
-            throw new PackageNotFoundException(String.format("Package %d was not found", packageId));
+            throw new PackageNotFoundException(String.format("Package %d could not be updated because it was not found", packageId));
         }
 
         // TODO: Verify products exist, move currency conversion to productService, create PackageControllerAdvice.
@@ -72,7 +66,7 @@ public class PackageService {
     public void deletePackage(Long packageId) {
         final PackageDto packageDto = packageRepository.findOne(packageId);
         if (packageDto == null) {
-            throw new PackageNotFoundException(String.format("Package %d was not found", packageId));
+            throw new PackageNotFoundException(String.format("Could not delete package %d, it does not exist", packageId));
         }
         packageRepository.delete(packageDto);
     }
@@ -86,18 +80,9 @@ public class PackageService {
     private ShopPackage preparePackage(PackageDto packageDto, String currency) {
         final List<Product> packageProductList = new ArrayList<>();
         for (String productId : packageDto.getProductIds()) {
-            final Product product = productService.getProduct(productId);
-            product.setPrice(convertPrice(currency, product.getUsdPrice()));
-            packageProductList.add(product);
+            packageProductList.add(productService.getProduct(productId, currency));
         }
 
         return new ShopPackage(packageDto.getId(), packageDto.getName(), packageDto.getDescription(), packageProductList);
-    }
-
-    private double convertPrice(String currency, double currentPrice) {
-        if ("USD".equals(currency)) {
-            return currentPrice;
-        }
-        return fixerService.exchange(currency, currentPrice);
     }
 }

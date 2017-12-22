@@ -24,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest extends ResourceAwareTest {
 
+    private static final String DEFAULT_CURRENCY_CODE = "USD";
+
     private static final String PRODUCT_ID = "testProductId";
     private static final String CACHED_PRODUCT_ID = "VqKb4tyj9V6i";
     private static final String ERROR_PRODUCT_ID = "IAMERROR";
@@ -46,7 +48,7 @@ public class ProductServiceTest extends ResourceAwareTest {
 
     @Test
     public void testShouldFetchAndCacheProducts() throws Exception {
-        final List<Product> productList = productService.getProducts();
+        final List<Product> productList = productService.getProducts(DEFAULT_CURRENCY_CODE);
 
         assertThat(productList).isNotNull();
         assertThat(productList).hasSize(9);
@@ -57,15 +59,15 @@ public class ProductServiceTest extends ResourceAwareTest {
     @Test
     public void testShouldFetchProductsOnce() throws Exception {
         for (int i = 0; i < 2; i++) {
-            productService.getProducts();
+            productService.getProducts(DEFAULT_CURRENCY_CODE);
         }
         Mockito.verify(productServiceClient, Mockito.times(1)).fetchProducts();
     }
 
     @Test
     public void testShouldFetchAndCacheProductNotInitiallyCached() throws Exception {
-        final List<Product> productList = productService.getProducts();
-        final Product product = productService.getProduct(PRODUCT_ID);
+        final List<Product> productList = productService.getProducts(DEFAULT_CURRENCY_CODE);
+        final Product product = productService.getProduct(PRODUCT_ID, DEFAULT_CURRENCY_CODE);
 
         assertThat(productList).isNotNull();
         assertThat(productList).hasSize(9);
@@ -79,8 +81,8 @@ public class ProductServiceTest extends ResourceAwareTest {
 
     @Test
     public void testShouldNotFetchCachedProduct() throws Exception {
-        final List<Product> productList = productService.getProducts();
-        final Product product = productService.getProduct(CACHED_PRODUCT_ID);
+        final List<Product> productList = productService.getProducts(DEFAULT_CURRENCY_CODE);
+        final Product product = productService.getProduct(CACHED_PRODUCT_ID, DEFAULT_CURRENCY_CODE);
 
         assertThat(productList).isNotNull();
         assertThat(productList).hasSize(9);
@@ -96,7 +98,7 @@ public class ProductServiceTest extends ResourceAwareTest {
     public void testProductNotFoundExceptionIsThrownIfProductDoesNotExist() throws Exception {
         Mockito.when(productServiceClient.fetchProduct(ERROR_PRODUCT_ID)).thenThrow(new RestClientException("Errors!"));
 
-        assertThatThrownBy(() -> productService.getProduct(ERROR_PRODUCT_ID))
+        assertThatThrownBy(() -> productService.getProduct(ERROR_PRODUCT_ID, DEFAULT_CURRENCY_CODE))
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessage("Product IAMERROR not found!");
     }

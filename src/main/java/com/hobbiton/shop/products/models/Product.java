@@ -1,15 +1,23 @@
 package com.hobbiton.shop.products.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author Dominic Gunn
  */
 public class Product {
 
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private String name;
 
-    private int usdPrice;
+    @JsonProperty
     private double price;
+
+    private transient int usdPrice;
 
     public Product() {
         // Default Constructor

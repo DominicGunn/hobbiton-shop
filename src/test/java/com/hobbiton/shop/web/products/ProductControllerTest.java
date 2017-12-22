@@ -25,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @RunWith(MockitoJUnitRunner.class)
 public class ProductControllerTest {
 
+    private static final String DEFAULT_CURRENCY_CODE = "USD";
+
     @Mock
     private ProductService productService;
 
@@ -38,10 +40,17 @@ public class ProductControllerTest {
         final Product testProduct = new Product("testProductId", "productName", 100);
         final Product testProduct2 = new Product("testProductId2", "productName2", 150);
 
-        Mockito.when(productService.getProduct("testProductId")).thenReturn(testProduct);
-        Mockito.when(productService.getProduct("doesNotExist")).thenThrow(new ProductNotFoundException("Product doesNotExist does not exist!"));
+        // This conversion would happen within the mocked product services call to the FixerService.
+        testProduct.setPrice(100);
+        testProduct2.setPrice(150);
 
-        Mockito.when(productService.getProducts()).thenReturn(Arrays.asList(testProduct, testProduct2));
+        Mockito.when(productService.getProduct("testProductId", DEFAULT_CURRENCY_CODE))
+                .thenReturn(testProduct);
+
+        Mockito.when(productService.getProduct("doesNotExist", DEFAULT_CURRENCY_CODE))
+                .thenThrow(new ProductNotFoundException("Product doesNotExist does not exist!"));
+
+        Mockito.when(productService.getProducts(DEFAULT_CURRENCY_CODE)).thenReturn(Arrays.asList(testProduct, testProduct2));
 
         mockMvc = MockMvcBuilders.standaloneSetup(productController)
                 .setControllerAdvice(new ProductControllerAdvice())
@@ -55,7 +64,6 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value("testProductId"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[1].id").value("testProductId2"));
-        ;
     }
 
     @Test
@@ -63,9 +71,10 @@ public class ProductControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/products/testProductId"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value("100.0"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.usdPrice").value("100"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("testProductId"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("productName"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.usdPrice").value("100"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("productName"));
     }
 
     @Test

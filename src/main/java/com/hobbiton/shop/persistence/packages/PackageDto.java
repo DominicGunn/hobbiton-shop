@@ -25,7 +25,7 @@ public class PackageDto {
     private List<String> productIds;
 
     public PackageDto() {
-        // Default constructor.
+        // Default constructor for Hibernate.
     }
 
     public PackageDto(String name, String description, List<String> productIds) {

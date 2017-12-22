@@ -1,0 +1,7 @@
+{
+  "name": "Updated Package",
+  "description": "Test Description",
+  "productIds": [
+    "testProductId"
+  ]
+}

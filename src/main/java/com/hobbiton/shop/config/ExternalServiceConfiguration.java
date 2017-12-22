@@ -18,7 +18,7 @@ public class ExternalServiceConfiguration {
     @Value("${external.product.service.available:true}")
     private boolean productServiceAvailable;
 
-    @Value("${external.product.service.url:https://products-service.herokuapp.com/api/v1/products")
+    @Value("${external.product.service.url:https://product-service.herokuapp.com/api/v1/products}")
     private String productServiceUrl;
 
     public String getProductServiceUsername() {

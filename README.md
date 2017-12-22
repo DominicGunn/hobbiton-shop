@@ -20,9 +20,10 @@ And of course a bunch of other great libraries such as an embedded [Tomcat](http
 ## Setup and Execution
 ### Docker
 
-Running the `docker` command will generate a versioned docker image (`hobbiton/shop:<VERSION`) that we can use to start the application. 
+Running the `docker` command will generate a versioned docker image (`hobbiton/shop:<VERSION>`) that we can use to start the application. 
 
-A `docker-compose.yml` with required services (e.x. `PostgreSQL`) has been provided.
+A `docker-compose.yml` with required services (e.x. `PostgreSQL`) has been provided, once we have built the service docker image (`./gradlew docker`) we can start up the required containers with Docker compose.
+
 ```sh
 $ ./gradlew docker
 $ docker-compose up -d
@@ -48,5 +49,5 @@ Hobbiton Shop Service is considered a [12 Factor](https://12factor.net/) applica
 | SPRING_DATASOURCE_PASSWORD | postgres | Database users password.
 | EXTERNAL_PRODUCT_SERVICE_USERNAME | user | Username for products service Basic HTTP Authentication.
 | EXTERNAL_PRODUCT_SERVICE_PASSWORD | pass | Password for products service Basic HTTP Authentication.
-| EXTERNAL_PRODUCT_SERVICE_URL | https://products-service.herokuapp.com/api/v1/products | URL of the Product Service.
+| EXTERNAL_PRODUCT_SERVICE_URL | https://product-service.herokuapp.com/api/v1/products | URL of the Product Service.
 | EXTERNAL_PRODUCT_SERVICE_AVAILABLE | true | If false, a static list of products will be used instead of calling the product service.

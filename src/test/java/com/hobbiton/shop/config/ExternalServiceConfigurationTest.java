@@ -22,6 +22,8 @@ public class ExternalServiceConfigurationTest {
     public void setUp() throws Exception {
         Whitebox.setInternalState(externalServiceConfiguration, "productServiceUsername", "testUsername");
         Whitebox.setInternalState(externalServiceConfiguration, "productServicePassword", "testPassword");
+        Whitebox.setInternalState(externalServiceConfiguration, "productServiceAvailable", true);
+        Whitebox.setInternalState(externalServiceConfiguration, "productServiceUrl", "http://product-service");
     }
 
     @Test
@@ -32,5 +34,15 @@ public class ExternalServiceConfigurationTest {
     @Test
     public void testShouldReturnExternalServicePassword() throws Exception {
         assertThat(externalServiceConfiguration.getProductServicePassword()).isEqualTo("testPassword");
+    }
+
+    @Test
+    public void testShouldReturnExternalServiceAvailabilityFlag() throws Exception {
+        assertThat(externalServiceConfiguration.isProductServiceAvailable()).isTrue();
+    }
+
+    @Test
+    public void testShouldReturnExternalServiceUrl() throws Exception {
+        assertThat(externalServiceConfiguration.getProductServiceUrl()).isEqualTo("http://product-service");
     }
 }

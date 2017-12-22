@@ -22,7 +22,6 @@ import java.util.List;
 @Component
 public class ProductServiceClient {
 
-    private static final String PRODUCT_API_BASE_URL = "https://products-service.herokuapp.com/api/v1/products";
     private static final ParameterizedTypeReference<List<Product>> PRODUCT_TYPE_REFERENCE = new ParameterizedTypeReference<List<Product>>(){ };
 
     @Autowired
@@ -33,7 +32,7 @@ public class ProductServiceClient {
 
     public Product fetchProduct(String productId) {
         final HttpHeaders requestHeaders = createRequestHeaders();
-        final String productUrl = PRODUCT_API_BASE_URL + String.format("/%s", productId);
+        final String productUrl = String.format("%s/%s", externalServiceConfiguration.getProductServiceUrl(), productId);
         final ResponseEntity<Product> responseEntity = restTemplate.exchange(
                 productUrl, HttpMethod.GET, new HttpEntity<>(requestHeaders), Product.class
         );
@@ -41,10 +40,10 @@ public class ProductServiceClient {
     }
 
     public List<Product> fetchProducts() {
-        if (externalServiceConfiguration.getProductServiceAvailable()) {
+        if (externalServiceConfiguration.isProductServiceAvailable()) {
             final HttpHeaders requestHeaders = createRequestHeaders();
             final ResponseEntity<List<Product>> responseEntity = restTemplate.exchange(
-                    PRODUCT_API_BASE_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), PRODUCT_TYPE_REFERENCE
+                    externalServiceConfiguration.getProductServiceUrl(), HttpMethod.GET, new HttpEntity<>(requestHeaders), PRODUCT_TYPE_REFERENCE
             );
             return responseEntity.getBody();
         }

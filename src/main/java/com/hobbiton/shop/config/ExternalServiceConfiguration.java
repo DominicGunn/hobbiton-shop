@@ -9,14 +9,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExternalServiceConfiguration {
 
-    @Value("${external.products.service.username:user}")
+    @Value("${external.product.service.username:user}")
     private String productServiceUsername;
 
-    @Value("${external.products.service.password:pass}")
+    @Value("${external.product.service.password:pass}")
     private String productServicePassword;
 
-    @Value("${external.products.service.available:true}")
+    @Value("${external.product.service.available:true}")
     private boolean productServiceAvailable;
+
+    @Value("${external.product.service.url:https://products-service.herokuapp.com/api/v1/products")
+    private String productServiceUrl;
 
     public String getProductServiceUsername() {
         return productServiceUsername;
@@ -26,7 +29,11 @@ public class ExternalServiceConfiguration {
         return productServicePassword;
     }
 
-    public boolean getProductServiceAvailable() {
+    public boolean isProductServiceAvailable() {
         return productServiceAvailable;
+    }
+
+    public String getProductServiceUrl() {
+        return productServiceUrl;
     }
 }

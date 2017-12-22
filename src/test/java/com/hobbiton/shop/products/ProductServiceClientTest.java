@@ -67,6 +67,8 @@ public class ProductServiceClientTest extends ResourceAwareTest {
                 Mockito.eq(Product.class)
         )).thenReturn(singleResponse);
 
+        Mockito.when(externalServiceConfiguration.isProductServiceAvailable()).thenReturn(true);
+        Mockito.when(externalServiceConfiguration.getProductServiceUrl()).thenReturn(PRODUCT_API_BASE_URL);
         Mockito.when(externalServiceConfiguration.getProductServiceUsername()).thenReturn(PRODUCT_SERVICE_USERNAME);
         Mockito.when(externalServiceConfiguration.getProductServicePassword()).thenReturn(PRODUCT_SERVICE_PASSWORD);
     }
@@ -90,7 +92,7 @@ public class ProductServiceClientTest extends ResourceAwareTest {
 
     @Test
     public void testFetchMockProducts() throws Exception {
-        Mockito.when(externalServiceConfiguration.getProductServiceAvailable()).thenReturn(false);
+        Mockito.when(externalServiceConfiguration.isProductServiceAvailable()).thenReturn(false);
 
         final List<Product> productList = productServiceClient.fetchProducts();
 

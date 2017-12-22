@@ -15,6 +15,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'eclipse'
 apply plugin: 'com.palantir.docker'
 apply plugin: 'org.springframework.boot'
@@ -34,6 +35,13 @@ dependencies {
 
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
 }
 
 docker {

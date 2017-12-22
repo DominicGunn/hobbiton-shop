@@ -46,5 +46,5 @@ Hobbiton Shop Service is considered a [12 Factor](https://12factor.net/) applica
 | SPRING_DATASOURCE_PASSWORD | postgres | Database users password.
 | EXTERNAL_PRODUCT_SERVICE_USERNAME | user | Username for products service Basic HTTP Authentication.
 | EXTERNAL_PRODUCT_SERVICE_PASSWORD | pass | Password for products service Basic HTTP Authentication.
-| EXTERNAL_PRODUCT_SERVICE_URL | true | URL of the Product Service.
+| EXTERNAL_PRODUCT_SERVICE_URL | https://products-service.herokuapp.com/api/v1/products | URL of the Product Service.
 | EXTERNAL_PRODUCT_SERVICE_AVAILABLE | true | If false, a static list of products will be used instead of calling the product service.

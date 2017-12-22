@@ -9,6 +9,7 @@ buildscript {
 		}
 	}
 	dependencies {
+        classpath('org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3')
         classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
@@ -16,6 +17,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'eclipse'
 apply plugin: 'com.palantir.docker'
 apply plugin: 'org.springframework.boot'

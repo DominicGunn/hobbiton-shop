@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/DominicGunn/hobbiton-shop.svg?branch=master)](https://api.travis-ci.org/DominicGunn/hobbiton-shop) [![Coverage Status](https://coveralls.io/repos/DominicGunn/hobbiton-shop/badge.svg?branch=master)](https://coveralls.io/r/DominicGunn/hobbiton-shop?branch=master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/DominicGunn/hobbiton-shop/blob/master/license.txt)
+
 # Hobbiton Shop Service
 
 Hobbiton shop is an example packaging service that makes use of an online [product service](products-service.herokuapp.com/api/v1/products) to create and manage packages of products.

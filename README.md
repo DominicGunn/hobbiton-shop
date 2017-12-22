@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/DominicGunn/hobbiton-shop.svg?branch=master)](https://api.travis-ci.org/DominicGunn/hobbiton-shop) [![Coverage Status](https://coveralls.io/repos/DominicGunn/hobbiton-shop/badge.svg?branch=master)](https://coveralls.io/r/DominicGunn/hobbiton-shop?branch=master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/DominicGunn/hobbiton-shop/blob/master/license.txt)
+[![Build Status](https://api.travis-ci.org/DominicGunn/hobbiton-shop.svg?branch=master)](https://api.travis-ci.org/DominicGunn/hobbiton-shop) [![Coverage Status](https://coveralls.io/repos/github/DominicGunn/hobbiton-shop/badge.svg?branch=master)](https://coveralls.io/github/DominicGunn/hobbiton-shop?branch=master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/DominicGunn/hobbiton-shop/blob/master/license.txt)
 
 # Hobbiton Shop Service
 

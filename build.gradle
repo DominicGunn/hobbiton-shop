@@ -4,24 +4,28 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'com.palantir.docker'
 apply plugin: 'org.springframework.boot'
 
-group = 'com.hobbiton'
-version = '0.0.1-SNAPSHOT'
+group = 'hobbiton'
+version = '0.1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
 }
-
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
@@ -30,4 +34,13 @@ dependencies {
 
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+docker {
+    name project.group + '/' + project.name + ':' + project.version
+    tags 'latest'
+    dockerfile file('src/main/docker/Dockerfile')
+    buildArgs([BUILD_VERSION: project.version])
+    files jar
+    dependsOn tasks.build
 }

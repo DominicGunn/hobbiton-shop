@@ -1,6 +1,15 @@
 version: '3.1'
 
 services:
+  shop_api:
+    image: hobbiton/shop:0.1.0-SNAPSHOT
+    ports:
+      - "5000:8080"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://shop_database:5432/shop"
+    depends_on:
+      - shop_database
+
   shop_database:
     image: postgres:9.6.4
     ports:

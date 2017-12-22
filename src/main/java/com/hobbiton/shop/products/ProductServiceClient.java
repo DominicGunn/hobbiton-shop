@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -40,11 +41,14 @@ public class ProductServiceClient {
     }
 
     public List<Product> fetchProducts() {
-        final HttpHeaders requestHeaders = createRequestHeaders();
-        final ResponseEntity<List<Product>> responseEntity = restTemplate.exchange(
-                PRODUCT_API_BASE_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), PRODUCT_TYPE_REFERENCE
-        );
-        return responseEntity.getBody();
+        if (externalServiceConfiguration.getProductServiceAvailable()) {
+            final HttpHeaders requestHeaders = createRequestHeaders();
+            final ResponseEntity<List<Product>> responseEntity = restTemplate.exchange(
+                    PRODUCT_API_BASE_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), PRODUCT_TYPE_REFERENCE
+            );
+            return responseEntity.getBody();
+        }
+        return mockProductList();
     }
 
     private HttpHeaders createRequestHeaders() {
@@ -54,5 +58,25 @@ public class ProductServiceClient {
                 externalServiceConfiguration.getProductServicePassword()
         ).getBytes(StandardCharsets.UTF_8))));
         return requestHeaders;
+    }
+
+    /**
+     * For the majority of writing this, the product service:
+     * https://products-service.herokuapp.com/api/v1/products
+     * was offline. This was a hack so development could continue.
+     * @return A list of Products.
+     */
+    private List<Product> mockProductList() {
+        return Arrays.asList(
+                new Product("VqKb4tyj9V6i", "Shield", 1149),
+                new Product("DXSQpv6XVeJm", "Helmet", 999),
+                new Product("7dgX6XzU3Wds", "Sword", 899),
+                new Product("PKM5pGAh9yGm", "Axe", 799),
+                new Product("7Hv0hA2nmci7", "Knife", 349),
+                new Product("500R5EHvNlNB", "Gold Coin", 249),
+                new Product("IP3cv7TcZhQn", "Platinum Cold", 399),
+                new Product("IJOHGYkY2CYq", "Bow", 649),
+                new Product("8anPsR2jbfNW", "Silver Coin", 50)
+        );
     }
 }

@@ -71,7 +71,6 @@ public class ProductService {
         try {
             // Query products service for existing products and cache them.
             final List<Product> existingProducts = productServiceClient.fetchProducts();
-//            final List<Product> existingProducts = Collections.singletonList(new Product("VqKb4tyj9V6i", "Shield", 1149));
 
             // Update last fetch date.
             lastFetchDate = new Date();
@@ -87,7 +86,6 @@ public class ProductService {
             logger.error("Unable to fetch products from the products service", ex);
         }
     }
-
 
     private double convertPrice(String currencyCode, double currentPrice) {
         if ("USD".equals(currencyCode)) {

@@ -87,4 +87,14 @@ public class ProductServiceClientTest extends ResourceAwareTest {
         assertThat(productList).isNotEmpty();
         assertThat(productList).hasSize(9);
     }
+
+    @Test
+    public void testFetchMockProducts() throws Exception {
+        Mockito.when(externalServiceConfiguration.getProductServiceAvailable()).thenReturn(false);
+
+        final List<Product> productList = productServiceClient.fetchProducts();
+
+        assertThat(productList).isNotEmpty();
+        assertThat(productList).hasSize(9);
+    }
 }

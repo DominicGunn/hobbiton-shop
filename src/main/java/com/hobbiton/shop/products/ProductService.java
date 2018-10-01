@@ -25,7 +25,7 @@ public class ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
-    private static final Integer CACHE_REFRESH_TIME_IN_MINUTES = 5;
+    private static final Integer CACHE_REFRESH_TIME_IN_MINUTES = 3;
 
     @Autowired
     private FixerService fixerService;
